@@ -23,7 +23,7 @@ extern "C" {
       GLint aVertexNormal;
 
       static glm::mat4 createBaseMatrix(float x, float y, float z);
-      static void bufferFloatData (const std::vector<float> &, GLuint &, GLint &, bool doGenBuffers);
+      static void bufferFloatData (const std::vector<float> &, GLuint &, GLint &, const bool doGenBuffers);
       static int bufferElementData( GLuint &, bool);
 
       int initSphereBuffers(std::vector<GLuint> &, std::vector<GLuint> &, std::vector<GLuint> &);
@@ -69,7 +69,7 @@ extern "C" {
         {
           vecNorms = normals::calculateNormals(vecVerts, vecInds);
         }
-        void initToBuffers(std::vector<GLuint> & v, std::vector<GLuint> &n, std::vector<GLuint> &i) ;
+        void initToBuffers( std::vector<GLuint> & v,  std::vector<GLuint> &n,  std::vector<GLuint> &i) ;
 
 
 

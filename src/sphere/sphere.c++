@@ -17,7 +17,7 @@ glm::mat4 sphere::createBaseMatrix(float x, float y, float z) {
   return glm::translate(modelViewMatrix, glm::vec3(x, y, z));
 }
 
-int sphere::bufferElementData(const GLuint &indices, const bool doGenBuffers) {  // NOLINT misc-unused-parameters
+int sphere::bufferElementData(GLuint &indices, const bool doGenBuffers) {  // NOLINT misc-unused-parameters
 
   int indSize = vecInds.size() * sizeof(int);
 
@@ -31,7 +31,7 @@ int sphere::bufferElementData(const GLuint &indices, const bool doGenBuffers) { 
   return vecInds.size();
 }
 
-void sphere::bufferFloatData (const std::vector<float> & floats, const GLuint &  buffer, const GLint &  uniOrAttrib, const bool doGenBuffers) { // NOLINT misc-unused-parameters
+void sphere::bufferFloatData ( const std::vector<float> & floats,  GLuint &  buffer,  GLint &  uniOrAttrib, const bool doGenBuffers) { // NOLINT misc-unused-parameters
 
   if (doGenBuffers) {
     glGenBuffers(1, &buffer);
@@ -43,7 +43,7 @@ void sphere::bufferFloatData (const std::vector<float> & floats, const GLuint & 
   glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-int sphere::initSphereBuffers(const std::vector<GLuint> &  svs, const std::vector<GLuint> &  sns, const std::vector<GLuint> &  vis) { // NOLINT  misc-unused-parameters
+int sphere::initSphereBuffers(std::vector<GLuint> &  svs,  std::vector<GLuint> &  sns,  std::vector<GLuint> &  vis) { // NOLINT  misc-unused-parameters
 
   svs.push_back(0);
   sns.push_back(0);
@@ -58,7 +58,7 @@ int sphere::initSphereBuffers(const std::vector<GLuint> &  svs, const std::vecto
   return buffId;
 }
 
-void sphere::initToBuffers(const std::vector<GLuint> &  v, const std::vector<GLuint> & n, const std::vector<GLuint> & i) {  // NOLINT  misc-unused-parameters
+void sphere::initToBuffers(std::vector<GLuint> &  v, std::vector<GLuint> & n,  std::vector<GLuint> & i) {  // NOLINT  misc-unused-parameters
 
   int buffId = this->initSphereBuffers(v, n, i);
   this->setVertLoc(v[buffId]);

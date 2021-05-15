@@ -13,7 +13,6 @@ file(COPY shaders DESTINATION ".")
 add_executable(main
   src/main.c++
   src/normals/normals.c++
-  src/util/out.c++
   src/sphere/sphere.c++
   src/dialogs/dialogs.c++  
   imgui/imgui_impl_sdl.cpp
