@@ -8,3 +8,5 @@ in the future we will want to remove not-used fonts from the build; probably do 
 
 i mean to look into the best way to pull in imgui, instead of committing it independently. (git submodules probably are not quite right, but something like that; conan packaging?)
 
+*** glm library
+in the cmake file, notice that you need to link in the glm c++ library. this hard-coded path is set for a mac with a very specific version of that lib brew-installed. it will need to be changed if you try to build.
