@@ -4,10 +4,10 @@ import http.server
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import socketserver
 
-# A bunch of rigmarole to set the directory to "pages"
+# A bunch of rigmarole to set the directory to "docs"
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory="pages", **kwargs)
+        super().__init__(*args, directory="docs", **kwargs)
     
 PORT = 8080
 
