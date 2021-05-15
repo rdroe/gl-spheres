@@ -10,19 +10,13 @@
 extern "C" {
   class dialogs {
     SDL_GLContext g_GLContext = NULL;
-    bool show_demo_window;
-    bool show_another_window;    
+    bool show_demo_window = true;
+    bool show_another_window = false;    
     public:
       SDL_Window* initImgui();
       ImGuiIO& getIo();
       void compose(SDL_Window* window);
       void render();
-    
-      dialogs() {
-	show_demo_window = true;
-	show_another_window = false;
-      }
-    
   };
 }
 #endif

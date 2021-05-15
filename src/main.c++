@@ -1,19 +1,17 @@
 
-#include <stdio.h>
+#include <cstdio>
 #include <emscripten.h>
-#include <SDL.h>
-#include <SDL_opengles2.h>
-#include <iostream>
 #include <fstream>
-
-#include <functional>
-#include <emscripten.h>
 #include <iostream>
+
 #include <algorithm>
+#include <emscripten.h>
+#include <functional>
+#include <iostream>
 #include <vector>
 
-#include "normals/normals.h++"
 #include "dialogs/dialogs.h++"
+#include "normals/normals.h++"
 #include "sphere/sphere.h++"
 #include "util/file_util/file_util.h++"
 
@@ -26,8 +24,8 @@
 
 #include <SDL2/SDL_opengles2.h>
 #define GL_GLEXT_PROTOTYPES
-#include <GLES3/gl3.h>
 #include <GLES2/gl2ext.h>
+#include <GLES3/gl3.h>
 
 std::function<void()> loop;
 void main_loop() { loop(); }
@@ -60,9 +58,11 @@ GLfloat sphereColor[3] = {0.5, 0.8, 0.1};
 
 glm::mat4 normalMatrix= glm::mat4(1.0f);;
 
-  glm::mat4 proj = glm::perspective(90.0f, (float)1280 / 720, 0.1f, 10000.0f);
+glm::mat4 proj = glm::perspective(90.0f, (float)1280 / 720, 0.1f, 10000.0f);
 glm::mat4 norm = glm::transpose(glm::inverse(glm::translate(normalMatrix, glm::vec3(0, 0, -1.5))));
 
+const int DEPTH_INIT = 24;
+const int STENCIL_INIT = 8;
 
 dialogs dialogs1;
 
@@ -80,14 +80,14 @@ void initSdl() {
 
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, DEPTH_INIT);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, STENCIL_INIT);
 
     SDL_DisplayMode current;
     SDL_GetCurrentDisplayMode(0, &current);
 }
 
-GLuint getShader(GLenum shaderType, std::string strSource) {
+GLuint getShader(GLenum  shaderType, std::string strSource) {
 
   const GLchar* src = strSource.c_str();
   GLuint shader = glCreateShader(shaderType);
@@ -119,7 +119,7 @@ GLuint getShader(GLenum shaderType, std::string strSource) {
   return shader;
 }
 
-void ensureLinked(GLint shaderProgram) {
+void ensureLinked(GLint  /*shaderProgram*/) {
   // Check the status of the compile/link
   // glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &logLen);
   GLint linked;
@@ -223,14 +223,20 @@ int main()
 
   int ticker = 0;
   updateUniforms();
-
   // io.Fonts->AddFontDefault();
   ImGuiIO& io = dialogs1.getIo();
-  
+    
   loop = [&] {
-    // match sphere viewpoint and coords to that of imgui
-    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
+    int portX = (int)io.DisplaySize.x;
+    int portY = (int)io.DisplaySize.y;
+
+    glViewport(
+      0,
+      0,
+      portX >= 0 ? portX : 0,
+      portY >= 0 ? portY : 0
+    );
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     try {
@@ -249,6 +255,7 @@ int main()
       std::cout << "Draw loop Error!!!!!\n";
       std::cerr << err.what() << std::endl;
     }
+    
     dialogs1.compose(window);
     dialogs1.render();
     
