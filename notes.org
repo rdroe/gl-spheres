@@ -1,0 +1,10 @@
+
+*** emscripten filesystem
+
+for information on how the simulated filesystem works, see emscripten's docs on that.
+
+*** this is a development build
+in the future we will want to remove not-used fonts from the build; probably do other trimming of the finally-shipped package.
+
+i mean to look into the best way to pull in imgui, instead of committing it independently. (git submodules probably are not quite right, but something like that; conan packaging?)
+
