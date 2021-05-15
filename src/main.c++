@@ -61,11 +61,14 @@ GLfloat lightDiffuseColor[3] = {1.0, 1.0, 1.0};
 GLfloat lightDirection[3] = {0.0, -1.0, -1.0};
 GLfloat sphereColor[3] = {0.5, 0.8, 0.1};
 
-glm::mat4 projectionMatrix= glm::mat4(1.0f);
 glm::mat4 normalMatrix= glm::mat4(1.0f);;
 
+  glm::mat4 proj = glm::perspective(90.0f, (float)1280 / 720, 0.1f, 10000.0f);
+glm::mat4 norm = glm::transpose(glm::inverse(glm::translate(normalMatrix, glm::vec3(0, 0, -1.5))));
+
+
 void initSdl() {
-    // Setup SDL
+    // Setup SDL, mainly for imgui
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
       printf("Error: %s\n", SDL_GetError());
@@ -183,37 +186,6 @@ void initProgram() {
   initShaders();
 }
 
-int bufferElementData(std::vector<int> & vecInds1, GLuint & indices, bool doGenBuffers) {
-
-  int * arrInd = vecInds1.data();
-  int indSize = vecInds1.size() * sizeof(int);
-
-  if (doGenBuffers == true) {
-    glGenBuffers(1, &indices);
-  }
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, arrInd, GL_STATIC_DRAW);
-  return vecInds1.size();
-}
-
-void bufferFloatData (std::vector<float> & vecVerts1, GLuint & buffer, GLint & uniOrAttrib, bool doGenBuffers) {
-
-  float * arrVert = vecVerts1.data();
-
-  if (doGenBuffers) {
-    glGenBuffers(1, &buffer);
-    std::cout << "buff: " << buffer << std::endl;
-  }
-
-  glBindBuffer(GL_ARRAY_BUFFER, buffer);
-  glBufferData(GL_ARRAY_BUFFER, vecVerts1.size() * sizeof(GLfloat), arrVert, GL_STATIC_DRAW);
-  glEnableVertexAttribArray(uniOrAttrib);
-
-  glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-}
-
-
 void initBuffers() {
 
   glGenVertexArrays(1, &sphereVAO);
@@ -240,13 +212,24 @@ void initShaderLocations() {
 
 }
 
+void updateUniforms() {
+
+  GLfloat * projPtr = glm::value_ptr( proj );
+  GLfloat * normPtr = glm::value_ptr( norm );
+  
+    glUniform3fv(uLightDirection, 1, lightDirection);
+    glUniform3fv(uLightDiffuse, 1, lightDiffuseColor);
+    glUniform3fv(uMaterialDiffuse, 1, sphereColor);
+
+    glUniformMatrix4fv(uProjectionMatrix, 1, GL_FALSE, projPtr);
+    glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, normPtr);
+}
+
 int main()
 {
   initProgram();
   initShaderLocations();
-
   initBuffers();
-
 
   sphere sphere1(aVertexPosition, aVertexNormal);
   sphere sphere2(aVertexPosition, aVertexNormal);
@@ -259,27 +242,17 @@ int main()
   sphere1.initToBuffers(sphereVertices, sphereNormals, sphereIndices);
   sphere2.initToBuffers(sphereVertices, sphereNormals, sphereIndices);
 
-  glm::mat4 proj = glm::perspective(90.0f, (float)1280 / 720, 0.1f, 10000.0f);
-  glm::mat4 norm = glm::translate(normalMatrix, glm::vec3(0, 0, -1.5));
-
-  norm = glm::inverse(norm);
-  norm = glm::transpose(norm);
-
-  GLfloat * projPtr = glm::value_ptr( proj );
-  GLfloat * normPtr = glm::value_ptr( norm );
-
   glBindVertexArray(sphereVAO);
 
   int ticker = 0;
+  updateUniforms();
 
+  // io.Fonts->AddFontDefault();
+  ImGuiIO& io = ImGui::GetIO();
+  static bool show_demo_window = true;
+  static bool show_another_window = false;
+  
   loop = [&] {
-    // sphere at index 0 is always the one to move, right now.
-    spheres[0]->move(glm::vec3( 0.05/4, 0, 0.1 / 4));
-
-    ImGuiIO& io = ImGui::GetIO();
-
-    static bool show_demo_window = true;
-    static bool show_another_window = false;
 
     SDL_Event event;
 
@@ -329,22 +302,16 @@ int main()
       ImGui::End();
     }
 
-    // match sphere viewpoint, coords to that of imgui
+    // match sphere viewpoint and coords to that of imgui
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUniform3fv(uLightDirection, 1, lightDirection);
-    glUniform3fv(uLightDiffuse, 1, lightDiffuseColor);
-    glUniform3fv(uMaterialDiffuse, 1, sphereColor);
-
-    glUniformMatrix4fv(uProjectionMatrix, 1, GL_FALSE, projPtr);
-    glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, normPtr);
-
+    
     try {
 
       glBindVertexArray(sphereVAO);
-
+      // sphere at index 0 is always the one to move, right now.
+      spheres[0]->move(glm::vec3( 0.05/4, 0, 0.1 / 4));
       for (int drawIterator = 0; drawIterator < spheres.size(); drawIterator ++) {
         spheres[drawIterator]->draw(uModelViewMatrix, ticker);
       }
@@ -363,9 +330,6 @@ int main()
     SDL_GL_SwapWindow(window);
     ticker++;
   }; // end loop definition.
-
-  // ImGuiIO& io = ImGui::GetIO();
-  // io.Fonts->AddFontDefault();
 
   emscripten_set_main_loop(main_loop, 0, true);
   return EXIT_SUCCESS;

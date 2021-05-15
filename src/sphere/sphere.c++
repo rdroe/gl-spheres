@@ -33,7 +33,6 @@ void sphere::bufferFloatData (const std::vector<float> & vecVerts1, GLuint & buf
 
   if (doGenBuffers) {
     glGenBuffers(1, &buffer);
-    std::cout << "buff: " << buffer << std::endl;
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, buffer);
