@@ -1,47 +1,47 @@
 #include "sphere.h++"
-#include <iostream>
-#include <vector>
-#include <string>
-#include <exception>
-#include <math.h>
+#include <cmath>
 #include <SDL.h>
 #include <SDL_opengles2.h>
+#include <exception>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+#include <string>
+#include <vector>
 
 glm::mat4 sphere::createBaseMatrix(float x, float y, float z) {
   glm::mat4 modelViewMatrix = glm::mat4(1.0f);
   return glm::translate(modelViewMatrix, glm::vec3(x, y, z));
 }
 
-int sphere::bufferElementData(const std::vector<int> & vecInds1, GLuint & indices, bool doGenBuffers) {
+int sphere::bufferElementData(GLuint &indices, bool doGenBuffers) {
 
-  int indSize = vecInds1.size() * sizeof(int);
+  int indSize = vecInds.size() * sizeof(int);
 
-  if (doGenBuffers == true) {
+  if (doGenBuffers) {
     glGenBuffers(1, &indices);
   }
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, vecInds1.data(), GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, vecInds.data(), GL_STATIC_DRAW);
 
-  return vecInds1.size();
+  return vecInds.size();
 }
 
-void sphere::bufferFloatData (const std::vector<float> & vecVerts1, GLuint & buffer, GLint & uniOrAttrib, bool doGenBuffers) {
+void sphere::bufferFloatData (const std::vector<float> & floats, GLuint &  buffer, GLint &  uniOrAttrib, bool doGenBuffers) {
 
   if (doGenBuffers) {
     glGenBuffers(1, &buffer);
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, buffer);
-  glBufferData(GL_ARRAY_BUFFER, vecVerts1.size() * sizeof(GLfloat), vecVerts1.data(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, floats.size() * sizeof(GLfloat), floats.data(), GL_STATIC_DRAW);
   glEnableVertexAttribArray(uniOrAttrib);
   glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-int sphere::initSphereBuffers(std::vector<GLuint> & svs, std::vector<GLuint> & sns, std::vector<GLuint> & vis) {
+int sphere::initSphereBuffers(std::vector<GLuint> &  svs, std::vector<GLuint> &  sns, std::vector<GLuint> &  vis) {
 
   svs.push_back(0);
   sns.push_back(0);
@@ -49,14 +49,14 @@ int sphere::initSphereBuffers(std::vector<GLuint> & svs, std::vector<GLuint> & s
 
   int buffId = svs.size() - 1;
 
-  sphere::bufferFloatData(vecVerts, svs[buffId], aVertexPosition, true);
+  sphere::bufferFloatData(sphere::vecVerts, svs[buffId], aVertexPosition, true);
   sphere::bufferFloatData(vecNorms, sns[buffId], aVertexNormal, true);
-  sphere::bufferElementData(vecInds, vis[buffId], true);
+  sphere::bufferElementData(vis[buffId], true);
 
   return buffId;
 }
 
-void sphere::initToBuffers(std::vector<GLuint> & v, std::vector<GLuint> &n, std::vector<GLuint> &i) {
+void sphere::initToBuffers(std::vector<GLuint> &  v, std::vector<GLuint> & n, std::vector<GLuint> & i) {
 
   int buffId = this->initSphereBuffers(v, n, i);
   this->setVertLoc(v[buffId]);
@@ -65,13 +65,13 @@ void sphere::initToBuffers(std::vector<GLuint> & v, std::vector<GLuint> &n, std:
 
 }
 
-void sphere::draw(GLuint uModelViewMatrix, int worldTime) {
+void sphere::draw(GLuint  uModelViewMatrix, int worldTime) {
 
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE,  this->getMvPtr() );
   bufferFloatData(vecVerts, vertLoc, aVertexPosition, false);
   bufferFloatData(vecNorms, normLoc, aVertexNormal, false);
 
-  int indSz = bufferElementData(vecInds, indLoc, false);
+  int indSz = bufferElementData(indLoc, false);
   glDrawElements(GL_TRIANGLES, indSz, GL_UNSIGNED_INT, 0);
 
   if (worldTime % 100 == 0)  {

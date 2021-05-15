@@ -24,7 +24,7 @@ extern "C" {
 
       static glm::mat4 createBaseMatrix(float x, float y, float z);
       static void bufferFloatData (const std::vector<float> &, GLuint &, GLint &, bool doGenBuffers);
-      static int bufferElementData(const std::vector<int> &, GLuint &, bool);
+      static int bufferElementData( GLuint &, bool);
 
       int initSphereBuffers(std::vector<GLuint> &, std::vector<GLuint> &, std::vector<GLuint> &);
 
