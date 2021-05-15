@@ -1,0 +1,22 @@
+
+node_modules
+public/vrugan
+
+# emacs automation files
+\#*
+**/\#
+**/.\#*
+.\#*
+*~
+
+# local os / aws
+*.icloud
+*.awcache
+**/.DS_Store
+
+# metrics logging; yarn error log
+*.log
+
+# build dir, cmake cache, etc
+build/*
+!build/.gitkeep
