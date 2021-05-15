@@ -12,10 +12,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_sdl.h"
-#include "../imgui/imgui_impl_opengl3.h"
 #include "normals/normals.h++"
+#include "dialogs/dialogs.h++"
 #include "sphere/sphere.h++"
 #include "util/file_util/file_util.h++"
 
@@ -34,8 +32,7 @@
 std::function<void()> loop;
 void main_loop() { loop(); }
 
-SDL_Window *window;
-SDL_GLContext g_GLContext = NULL;
+SDL_Window * window;
 GLuint shaderProgram;
 GLuint sphereVAO;
 
@@ -86,28 +83,6 @@ void initSdl() {
 
     SDL_DisplayMode current;
     SDL_GetCurrentDisplayMode(0, &current);
-    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    window = SDL_CreateWindow("spheres webgl demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-    g_GLContext = SDL_GL_CreateContext(window);
-    SDL_GL_SetSwapInterval(1);
-
-    // Begin imgui add
-    if (!g_GLContext)
-    {
-      fprintf(stderr, "Failed to initialize WebGL context!\n");
-    }
-}
-
-void initImgui() {
-
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    
-    ImGui_ImplSDL2_InitForOpenGL(window, g_GLContext);
-    ImGui_ImplOpenGL3_Init("#version 100");
-    // end an imgui add
-
 }
 
 GLuint getShader(GLenum shaderType, std::string strSource) {
@@ -179,8 +154,9 @@ void initShaders() {
 }
 
 void initProgram() {
+  dialogs dialogs1;
   initSdl();
-  initImgui();
+  window = dialogs1.initImgui();
   glClearColor ( 0.9f, 0.9f, 0.9f, 1.0f );
   glEnable(GL_DEPTH_TEST);
   initShaders();

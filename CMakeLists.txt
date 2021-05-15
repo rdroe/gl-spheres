@@ -15,6 +15,7 @@ add_executable(main
   src/normals/normals.c++
   src/util/out.c++
   src/sphere/sphere.c++
+  src/dialogs/dialogs.c++  
   imgui/imgui_impl_sdl.cpp
   imgui/imgui_impl_opengl3.cpp
   imgui/imgui.cpp
