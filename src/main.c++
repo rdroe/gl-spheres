@@ -64,6 +64,8 @@ glm::mat4 normalMatrix= glm::mat4(1.0f);;
 glm::mat4 norm = glm::transpose(glm::inverse(glm::translate(normalMatrix, glm::vec3(0, 0, -1.5))));
 
 
+dialogs dialogs1;
+
 void initSdl() {
     // Setup SDL, mainly for imgui
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
@@ -154,7 +156,6 @@ void initShaders() {
 }
 
 void initProgram() {
-  dialogs dialogs1;
   initSdl();
   window = dialogs1.initImgui();
   glClearColor ( 0.9f, 0.9f, 0.9f, 1.0f );
@@ -224,60 +225,9 @@ int main()
   updateUniforms();
 
   // io.Fonts->AddFontDefault();
-  ImGuiIO& io = ImGui::GetIO();
-  static bool show_demo_window = true;
-  static bool show_another_window = false;
+  ImGuiIO& io = dialogs1.getIo();
   
   loop = [&] {
-
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-      ImGui_ImplSDL2_ProcessEvent(&event);
-    }
-
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
-    ImGui::NewFrame();
-
-    if (show_demo_window) {
-      ImGui::ShowDemoWindow(&show_demo_window);
-    }
-
-    {
-      static float f = 0.0f;
-      static int counter = 0;
-
-      ImGui::Begin("Hello, world!");             
-      ImGui::Text("This is some useful text.");   
-      ImGui::Checkbox("Demo Window", &show_demo_window);
-      ImGui::Checkbox("Another Window", &show_another_window);
-
-      ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-
-      if (ImGui::Button("Button"))                  // Buttons return true when clicked
-      { counter++;
-
-      }
-
-      ImGui::SameLine();
-      ImGui::Text("counter = %d", counter);
-
-      ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-      ImGui::End();
-    }
-
-    if (show_another_window)
-    {
-      ImGui::Begin("Another Window", &show_another_window);
-      ImGui::Text("Hello from another window!");
-      if (ImGui::Button("Close Me")){
-        show_another_window = false;
-      }
-      ImGui::End();
-    }
-
     // match sphere viewpoint and coords to that of imgui
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
@@ -299,10 +249,9 @@ int main()
       std::cout << "Draw loop Error!!!!!\n";
       std::cerr << err.what() << std::endl;
     }
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+    dialogs1.compose(window);
+    dialogs1.render();
+    
     SDL_GL_SwapWindow(window);
     ticker++;
   }; // end loop definition.
