@@ -1,7 +1,7 @@
 #include "sphere.h++"
-#include <cmath>
 #include <SDL.h>
 #include <SDL_opengles2.h>
+#include <cmath>
 #include <exception>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
+const int INTERVAL_RESET = 100;
 
 glm::mat4 sphere::createBaseMatrix(float x, float y, float z) {
   glm::mat4 modelViewMatrix = glm::mat4(1.0f);
@@ -74,7 +76,7 @@ void sphere::draw(const GLuint  uModelViewMatrix, const int worldTime) {  // NOL
   int indSz = bufferElementData(indLoc, false);
   glDrawElements(GL_TRIANGLES, indSz, GL_UNSIGNED_INT, 0);
 
-  if (worldTime % 100 == 0)  {
+  if (worldTime % INTERVAL_RESET == 0)  {
     mv = createBaseMatrix(-1, 0, -1.5);
   }
 }
