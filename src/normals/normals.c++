@@ -5,7 +5,7 @@
 #include <exception>
 #include <math.h>
 
-std::vector<float> normals::calculateNormals(std::vector<float> vs, std::vector<int> ind) {
+std::vector<float> normals::calculateNormals(const std::vector<float> vs, const std::vector<int> ind) {  // NOLINT misc-unused-parameters
     std::vector<float> ns;
 
     ns.resize(vs.size() + 3);
