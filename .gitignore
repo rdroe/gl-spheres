@@ -18,5 +18,3 @@ public/vrugan
 *.log
 
 # build dir, cmake cache, etc
-build/*
-!build/.gitkeep
