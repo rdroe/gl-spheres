@@ -1,4 +1,3 @@
-#version 300 es
 precision mediump float;
 
 uniform mat4 uModelViewMatrix;
@@ -8,10 +7,10 @@ uniform vec3 uLightDirection;
 uniform vec3 uLightDiffuse;
 uniform vec3 uMaterialDiffuse;
 
-in vec3 aVertexPosition;
-in vec3 aVertexNormal;
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
 
-out vec4 vVertexColor;
+varying vec4 vVertexColor;
 
 void main(void) {
   // Calculate the normal vector
