@@ -48,6 +48,31 @@ void sphere::bufferFloatData(
   glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
+
+int sphere::updateElementData(
+    GLuint &indices) { // NOLINT misc-unused-parameters
+
+  int indSize = vecInds.size() * sizeof(int);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, vecInds.data(),
+               GL_STATIC_DRAW);
+
+  return vecInds.size();
+}
+
+void sphere::updateFloatData(
+    const std::vector<float> &floats, GLuint &buffer, GLint &uniOrAttrib) { // NOLINT misc-unused-parameters
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffer);
+  glBufferData(GL_ARRAY_BUFFER, floats.size() * sizeof(GLfloat), floats.data(),
+               GL_STATIC_DRAW);
+  glEnableVertexAttribArray(uniOrAttrib);
+  glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+
+
 void sphere::initSphereBuffers(const int & id) { // NOLINT  misc-unused-parameters
 
   GLuint ve;
@@ -55,7 +80,9 @@ void sphere::initSphereBuffers(const int & id) { // NOLINT  misc-unused-paramete
   GLuint i;
   
   sphere::bufferFloatData(sphere::vecVerts, ve, aVertexPosition, true);
+  
   sphere::bufferFloatData(vecNorms, n, aVertexNormal, true);
+  
   sphere::bufferElementData(i, true);
   
   this->setVertLoc(ve);
@@ -63,19 +90,14 @@ void sphere::initSphereBuffers(const int & id) { // NOLINT  misc-unused-paramete
   this->setIndLoc(i);
 }
 
-void sphere::init(const int & id) { // NOLINT  misc-unused-parameters
-  
-  this->initSphereBuffers(id);
-}
-
 void sphere::draw(const GLuint uModelViewMatrix,
                   const int worldTime) { // NOLINT  misc-unused-parameters
 
   glUniformMatrix4fv(uModelViewMatrix, 1, GL_FALSE, this->getMvPtr());
-  bufferFloatData(vecVerts, vertLoc, aVertexPosition, false);
-  bufferFloatData(vecNorms, normLoc, aVertexNormal, false);
+  updateFloatData(vecVerts, vertLoc, aVertexPosition);
+  updateFloatData(vecNorms, normLoc, aVertexNormal);
 
-  int indSz = bufferElementData(indLoc, false);
+  int indSz = updateElementData(indLoc);
   glDrawElements(GL_TRIANGLES, indSz, GL_UNSIGNED_INT, 0);
 
   if (worldTime % INTERVAL_RESET == 0) {

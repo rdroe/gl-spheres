@@ -203,16 +203,13 @@ int main() {
   initShaderLocations(shaderProgram);
   initBuffers();
 
-  sphere sphere1(aVertexPosition, aVertexNormal);
-  sphere sphere2(aVertexPosition, aVertexNormal);
+  sphere sphere1(0, aVertexPosition, aVertexNormal);
+  sphere sphere2(1, aVertexPosition, aVertexNormal);
 
   std::vector<sphere *> spheres(2);
 
   spheres[0] = &sphere1;
   spheres[1] = &sphere2;
-
-  sphere1.init(0);
-  sphere2.init(1);
 
   glBindVertexArray(sphereVAO);
 

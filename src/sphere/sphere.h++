@@ -26,6 +26,10 @@ class sphere {
   static void bufferFloatData(const std::vector<float> &, GLuint &, GLint &,
                               const bool doGenBuffers);
   static int bufferElementData(GLuint &, bool);
+  
+  static void updateFloatData(const std::vector<float> &, GLuint &, GLint &);
+  
+  static int updateElementData(GLuint &);  
 
   void initSphereBuffers(const int &);
 
@@ -51,13 +55,14 @@ public:
     this->mv = glm::translate(this->mv, translation);
   }
 
-  sphere(GLint aVertexPosition, GLint aVertexNormal)
+  sphere(const int sphereId, GLint aVertexPosition, GLint aVertexNormal)
       :
 
         aVertexPosition(aVertexPosition), aVertexNormal(aVertexNormal) {
     vecNorms = normals::calculateNormals(vecVerts, vecInds);
+    initSphereBuffers(sphereId);
+    
   }
-  void init(const int &);
 
   void draw(GLuint, int);
 };
