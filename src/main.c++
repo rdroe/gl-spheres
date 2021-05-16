@@ -31,7 +31,6 @@ std::function<void()> loop;
 void main_loop() { loop(); }
 
 SDL_Window * window;
-GLuint shaderProgram;
 GLuint sphereVAO;
 
 std::vector<GLuint> sphereIndices;
@@ -56,7 +55,7 @@ GLfloat lightDiffuseColor[3] = {1.0, 1.0, 1.0};
 GLfloat lightDirection[3] = {0.0, -1.0, -1.0};
 GLfloat sphereColor[3] = {0.5, 0.8, 0.1};
 
-glm::mat4 normalMatrix= glm::mat4(1.0f);;
+glm::mat4 normalMatrix= glm::mat4(1.0f);
 
 glm::mat4 proj = glm::perspective(90.0f, (float)1280 / 720, 0.1f, 10000.0f);
 glm::mat4 norm = glm::transpose(glm::inverse(glm::translate(normalMatrix, glm::vec3(0, 0, -1.5))));
@@ -119,9 +118,8 @@ GLuint getShader(GLenum  shaderType, std::string strSource) {
   return shader;
 }
 
-void ensureLinked(GLint  /*shaderProgram*/) {
+void ensureLinked(GLint shaderProgram) {
   // Check the status of the compile/link
-  // glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &logLen);
   GLint linked;
   GLint infoLen = 0;
   glGetProgramiv ( shaderProgram, GL_LINK_STATUS, &linked );
@@ -137,7 +135,7 @@ void ensureLinked(GLint  /*shaderProgram*/) {
   }
 }
 
-void initShaders() {
+GLint initShaders() {
   
   std::string vertexSource = file_util::read("shaders/vertex.shader");
   std::string fragmentSource = file_util::read("shaders/fragment.shader");
@@ -145,7 +143,7 @@ void initShaders() {
   GLuint vertexShader = getShader(GL_VERTEX_SHADER, vertexSource);
   GLuint fragmentShader = getShader(GL_FRAGMENT_SHADER, fragmentSource);
 
-  shaderProgram = glCreateProgram();
+  GLint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
   glLinkProgram(shaderProgram);
@@ -153,14 +151,15 @@ void initShaders() {
   ensureLinked(shaderProgram);
 
   glUseProgram(shaderProgram);
+  return shaderProgram;
 }
 
-void initProgram() {
+GLint initProgram() {
   initSdl();
   window = dialogs1.initImgui();
   glClearColor ( 0.9f, 0.9f, 0.9f, 1.0f );
   glEnable(GL_DEPTH_TEST);
-  initShaders();
+  return initShaders();
 }
 
 void initBuffers() {
@@ -176,7 +175,7 @@ void unsetBuffers() {
 }
 
 
-void initShaderLocations() {
+void initShaderLocations(GLint shaderProgram) {
 
   aVertexPosition = glGetAttribLocation(shaderProgram, "aVertexPosition");
   aVertexNormal = glGetAttribLocation(shaderProgram, "aVertexNormal");
@@ -204,8 +203,8 @@ void updateUniforms() {
 
 int main()
 {
-  initProgram();
-  initShaderLocations();
+  GLint shaderProgram = initProgram();
+  initShaderLocations(shaderProgram);
   initBuffers();
 
   sphere sphere1(aVertexPosition, aVertexNormal);
