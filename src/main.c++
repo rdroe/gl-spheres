@@ -36,7 +36,7 @@ GLuint sphereVAO;
 std::vector<GLuint> sphereIndices;
 std::vector<GLuint> sphereVertices;
 std::vector<GLuint> sphereNormals;
-std::vector<glm::mat4> sphereMatrices;
+
 
 std::vector<glm::mat4> translations;
 
@@ -211,8 +211,8 @@ int main() {
   spheres[0] = &sphere1;
   spheres[1] = &sphere2;
 
-  sphere1.initToBuffers(sphereVertices, sphereNormals, sphereIndices);
-  sphere2.initToBuffers(sphereVertices, sphereNormals, sphereIndices);
+  sphere1.init(0);
+  sphere2.init(1);
 
   glBindVertexArray(sphereVAO);
 

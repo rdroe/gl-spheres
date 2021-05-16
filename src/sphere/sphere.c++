@@ -48,31 +48,24 @@ void sphere::bufferFloatData(
   glVertexAttribPointer(uniOrAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-int sphere::initSphereBuffers(
-    std::vector<GLuint> &svs, std::vector<GLuint> &sns,
-    std::vector<GLuint> &vis) { // NOLINT  misc-unused-parameters
+void sphere::initSphereBuffers(const int & id) { // NOLINT  misc-unused-parameters
 
-  svs.push_back(0);
-  sns.push_back(0);
-  vis.push_back(0);
-
-  int buffId = svs.size() - 1;
-
-  sphere::bufferFloatData(sphere::vecVerts, svs[buffId], aVertexPosition, true);
-  sphere::bufferFloatData(vecNorms, sns[buffId], aVertexNormal, true);
-  sphere::bufferElementData(vis[buffId], true);
-
-  return buffId;
+  GLuint ve;
+  GLuint n;
+  GLuint i;
+  
+  sphere::bufferFloatData(sphere::vecVerts, ve, aVertexPosition, true);
+  sphere::bufferFloatData(vecNorms, n, aVertexNormal, true);
+  sphere::bufferElementData(i, true);
+  
+  this->setVertLoc(ve);
+  this->setNormLoc(n);
+  this->setIndLoc(i);
 }
 
-void sphere::initToBuffers(
-    std::vector<GLuint> &v, std::vector<GLuint> &n,
-    std::vector<GLuint> &i) { // NOLINT  misc-unused-parameters
-
-  int buffId = this->initSphereBuffers(v, n, i);
-  this->setVertLoc(v[buffId]);
-  this->setNormLoc(n[buffId]);
-  this->setIndLoc(i[buffId]);
+void sphere::init(const int & id) { // NOLINT  misc-unused-parameters
+  
+  this->initSphereBuffers(id);
 }
 
 void sphere::draw(const GLuint uModelViewMatrix,

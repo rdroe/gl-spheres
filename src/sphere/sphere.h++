@@ -27,8 +27,7 @@ class sphere {
                               const bool doGenBuffers);
   static int bufferElementData(GLuint &, bool);
 
-  int initSphereBuffers(std::vector<GLuint> &, std::vector<GLuint> &,
-                        std::vector<GLuint> &);
+  void initSphereBuffers(const int &);
 
   GLuint vertLoc;
   GLuint normLoc;
@@ -58,8 +57,7 @@ public:
         aVertexPosition(aVertexPosition), aVertexNormal(aVertexNormal) {
     vecNorms = normals::calculateNormals(vecVerts, vecInds);
   }
-  void initToBuffers(std::vector<GLuint> &v, std::vector<GLuint> &n,
-                     std::vector<GLuint> &i);
+  void init(const int &);
 
   void draw(GLuint, int);
 };
