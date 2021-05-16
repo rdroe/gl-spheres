@@ -18,13 +18,11 @@ glm::mat4 sphere::createBaseMatrix(float x, float y, float z) {
 }
 
 int sphere::bufferElementData(
-    GLuint &indices, const bool doGenBuffers) { // NOLINT misc-unused-parameters
+    GLuint &indices) { // NOLINT misc-unused-parameters
 
   int indSize = vecInds.size() * sizeof(int);
-
-  if (doGenBuffers) {
-    glGenBuffers(1, &indices);
-  }
+  glGenBuffers(1, &indices);
+ 
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indSize, vecInds.data(),
@@ -34,12 +32,10 @@ int sphere::bufferElementData(
 }
 
 void sphere::bufferFloatData(
-    const std::vector<float> &floats, GLuint &buffer, GLint &uniOrAttrib,
-    const bool doGenBuffers) { // NOLINT misc-unused-parameters
+    const std::vector<float> &floats, GLuint &buffer, GLint &uniOrAttrib) { // NOLINT misc-unused-parameters
 
-  if (doGenBuffers) {
-    glGenBuffers(1, &buffer);
-  }
+  glGenBuffers(1, &buffer);
+
 
   glBindBuffer(GL_ARRAY_BUFFER, buffer);
   glBufferData(GL_ARRAY_BUFFER, floats.size() * sizeof(GLfloat), floats.data(),
@@ -79,11 +75,11 @@ void sphere::initSphereBuffers(const int & id) { // NOLINT  misc-unused-paramete
   GLuint n;
   GLuint i;
   
-  sphere::bufferFloatData(sphere::vecVerts, ve, aVertexPosition, true);
+  sphere::bufferFloatData(sphere::vecVerts, ve, aVertexPosition);
   
-  sphere::bufferFloatData(vecNorms, n, aVertexNormal, true);
+  sphere::bufferFloatData(vecNorms, n, aVertexNormal);
   
-  sphere::bufferElementData(i, true);
+  sphere::bufferElementData(i);
   
   this->setVertLoc(ve);
   this->setNormLoc(n);
