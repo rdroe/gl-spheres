@@ -31,14 +31,6 @@ std::function<void()> loop;
 void main_loop() { loop(); }
 
 SDL_Window *window;
-GLuint sphereVAO;
-
-std::vector<GLuint> sphereIndices;
-std::vector<GLuint> sphereVertices;
-std::vector<GLuint> sphereNormals;
-
-
-std::vector<glm::mat4> translations;
 
 GLint aVertexPosition;
 GLint aVertexNormal;
@@ -161,12 +153,6 @@ GLint initProgram() {
   return initShaders();
 }
 
-void initBuffers() {
-
-  glGenVertexArrays(1, &sphereVAO);
-  glBindVertexArray(sphereVAO);
-}
-
 void unsetBuffers() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -201,7 +187,6 @@ void updateUniforms() {
 int main() {
   GLint shaderProgram = initProgram();
   initShaderLocations(shaderProgram);
-  initBuffers();
 
   sphere sphere1(0, aVertexPosition, aVertexNormal);
   sphere sphere2(1, aVertexPosition, aVertexNormal);
@@ -210,8 +195,6 @@ int main() {
 
   spheres[0] = &sphere1;
   spheres[1] = &sphere2;
-
-  glBindVertexArray(sphereVAO);
 
   int ticker = 0;
   updateUniforms();
@@ -227,7 +210,6 @@ int main() {
 
     try {
 
-      glBindVertexArray(sphereVAO);
       // sphere at index 0 is always the one to move, right now.
       spheres[0]->move(glm::vec3(0.05 / 4, 0, 0.1 / 4));
       for (int drawIterator = 0; drawIterator < spheres.size();
