@@ -200,7 +200,7 @@ Module.expectedDataFileDownloads++;
    "audio": 0
   } ],
   "remote_package_size": 504816,
-  "package_uuid": "f9c21781-c816-42cb-8055-f83e79fcce0e"
+  "package_uuid": "ff6e7d8a-ee59-4d6b-92b5-dea7dd09a417"
  });
 })();
 
@@ -1198,7 +1198,7 @@ var TOTAL_STACK = 5242880;
 
 if (Module["TOTAL_STACK"]) assert(TOTAL_STACK === Module["TOTAL_STACK"], "the stack size can no longer be determined at runtime");
 
-var INITIAL_MEMORY = Module["INITIAL_MEMORY"] || 288358400;
+var INITIAL_MEMORY = Module["INITIAL_MEMORY"] || 419430400;
 
 if (!Object.getOwnPropertyDescriptor(Module, "INITIAL_MEMORY")) {
  Object.defineProperty(Module, "INITIAL_MEMORY", {
@@ -1215,7 +1215,7 @@ assert(typeof Int32Array !== "undefined" && typeof Float64Array !== "undefined" 
 
 assert(!Module["wasmMemory"], "Use of `wasmMemory` detected.  Use -s IMPORTED_MEMORY to define wasmMemory externally");
 
-assert(INITIAL_MEMORY == 288358400, "Detected runtime INITIAL_MEMORY setting.  Use -s IMPORTED_MEMORY to define wasmMemory dynamically");
+assert(INITIAL_MEMORY == 419430400, "Detected runtime INITIAL_MEMORY setting.  Use -s IMPORTED_MEMORY to define wasmMemory dynamically");
 
 var wasmTable;
 
@@ -1701,7 +1701,7 @@ var tempDouble;
 var tempI64;
 
 var ASM_CONSTS = {
- 269018140: function($0, $1, $2) {
+ 269225436: function($0, $1, $2) {
   var w = $0;
   var h = $1;
   var pixels = $2;
@@ -1772,7 +1772,7 @@ var ASM_CONSTS = {
   SDL2.ctx.putImageData(SDL2.image, 0, 0);
   return 0;
  },
- 269019595: function($0, $1, $2, $3, $4) {
+ 269226891: function($0, $1, $2, $3, $4) {
   var w = $0;
   var h = $1;
   var hot_x = $2;
@@ -1809,36 +1809,36 @@ var ASM_CONSTS = {
   stringToUTF8(url, urlBuf, url.length + 1);
   return urlBuf;
  },
- 269020584: function($0) {
+ 269227880: function($0) {
   if (Module["canvas"]) {
    Module["canvas"].style["cursor"] = UTF8ToString($0);
   }
   return 0;
  },
- 269020677: function() {
+ 269227973: function() {
   if (Module["canvas"]) {
    Module["canvas"].style["cursor"] = "none";
   }
  },
- 269020746: function() {
+ 269228042: function() {
   return screen.width;
  },
- 269020771: function() {
+ 269228067: function() {
   return screen.height;
  },
- 269020797: function() {
+ 269228093: function() {
   return window.innerWidth;
  },
- 269020827: function() {
+ 269228123: function() {
   return window.innerHeight;
  },
- 269020858: function($0) {
+ 269228154: function($0) {
   if (typeof setWindowTitle !== "undefined") {
    setWindowTitle(UTF8ToString($0));
   }
   return 0;
  },
- 269020953: function() {
+ 269228249: function() {
   if (typeof AudioContext !== "undefined") {
    return 1;
   } else if (typeof webkitAudioContext !== "undefined") {
@@ -1846,7 +1846,7 @@ var ASM_CONSTS = {
   }
   return 0;
  },
- 269021090: function() {
+ 269228386: function() {
   if (typeof navigator.mediaDevices !== "undefined" && typeof navigator.mediaDevices.getUserMedia !== "undefined") {
    return 1;
   } else if (typeof navigator.webkitGetUserMedia !== "undefined") {
@@ -1854,7 +1854,7 @@ var ASM_CONSTS = {
   }
   return 0;
  },
- 269021314: function($0) {
+ 269228610: function($0) {
   if (typeof Module["SDL2"] === "undefined") {
    Module["SDL2"] = {};
   }
@@ -1876,11 +1876,11 @@ var ASM_CONSTS = {
   }
   return SDL2.audioContext === undefined ? -1 : 0;
  },
- 269021807: function() {
+ 269229103: function() {
   var SDL2 = Module["SDL2"];
   return SDL2.audioContext.sampleRate;
  },
- 269021875: function($0, $1, $2, $3) {
+ 269229171: function($0, $1, $2, $3) {
   var SDL2 = Module["SDL2"];
   var have_microphone = function(stream) {
    if (SDL2.capture.silenceTimer !== undefined) {
@@ -1921,7 +1921,7 @@ var ASM_CONSTS = {
    }, have_microphone, no_microphone);
   }
  },
- 269023527: function($0, $1, $2, $3) {
+ 269230823: function($0, $1, $2, $3) {
   var SDL2 = Module["SDL2"];
   SDL2.audio.scriptProcessorNode = SDL2.audioContext["createScriptProcessor"]($1, 0, $0);
   SDL2.audio.scriptProcessorNode["onaudioprocess"] = function(e) {
@@ -1933,7 +1933,7 @@ var ASM_CONSTS = {
   };
   SDL2.audio.scriptProcessorNode["connect"](SDL2.audioContext["destination"]);
  },
- 269023937: function($0, $1) {
+ 269231233: function($0, $1) {
   var SDL2 = Module["SDL2"];
   var numChannels = SDL2.capture.currentCaptureBuffer.numberOfChannels;
   for (var c = 0; c < numChannels; ++c) {
@@ -1952,7 +1952,7 @@ var ASM_CONSTS = {
    }
   }
  },
- 269024542: function($0, $1) {
+ 269231838: function($0, $1) {
   var SDL2 = Module["SDL2"];
   var numChannels = SDL2.audio.currentOutputBuffer["numberOfChannels"];
   for (var c = 0; c < numChannels; ++c) {
@@ -1965,7 +1965,7 @@ var ASM_CONSTS = {
    }
   }
  },
- 269025022: function($0) {
+ 269232318: function($0) {
   var SDL2 = Module["SDL2"];
   if ($0) {
    if (SDL2.capture.silenceTimer !== undefined) {
@@ -2003,22 +2003,22 @@ var ASM_CONSTS = {
    SDL2.audioContext = undefined;
   }
  },
- 269026194: function() {
+ 269233490: function() {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["ASAN_OPTIONS"] || 0);
   });
  },
- 269026291: function() {
+ 269233587: function() {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["LSAN_OPTIONS"] || 0);
   });
  },
- 269026388: function() {
+ 269233684: function() {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["UBSAN_OPTIONS"] || 0);
   });
  },
- 269026486: function() {
+ 269233782: function() {
   var setting = Module["printWithColors"];
   if (setting != null) {
    return setting;
@@ -8586,6 +8586,10 @@ function _emscripten_has_asyncify() {
  return 0;
 }
 
+function _emscripten_memcpy_big(dest, src, num) {
+ HEAPU8.copyWithin(dest, src, src + num);
+}
+
 var UNWIND_CACHE = {};
 
 function _emscripten_generate_pc(frame) {
@@ -10449,6 +10453,7 @@ var asmLibraryArg = {
  "emscripten_glVertexAttribPointer": _emscripten_glVertexAttribPointer,
  "emscripten_glViewport": _emscripten_glViewport,
  "emscripten_has_asyncify": _emscripten_has_asyncify,
+ "emscripten_memcpy_big": _emscripten_memcpy_big,
  "emscripten_pc_get_column": _emscripten_pc_get_column,
  "emscripten_pc_get_file": _emscripten_pc_get_file,
  "emscripten_pc_get_function": _emscripten_pc_get_function,
@@ -10645,7 +10650,7 @@ var dynCall_viiijj = Module["dynCall_viiijj"] = createExportWrapper("dynCall_vii
 
 var dynCall_jii = Module["dynCall_jii"] = createExportWrapper("dynCall_jii");
 
-var ___heap_base = Module["___heap_base"] = 278868096;
+var ___heap_base = Module["___heap_base"] = 279075392;
 
 var ___global_base = Module["___global_base"] = 268435456;
 
@@ -11542,8 +11547,14 @@ function callMain(args) {
  assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
  assert(__ATPRERUN__.length == 0, "cannot call main when preRun functions remain to be called");
  var entryFunction = Module["_main"];
- var argc = 0;
- var argv = 0;
+ args = args || [];
+ var argc = args.length + 1;
+ var argv = stackAlloc((argc + 1) * 4);
+ _asan_js_store_4(argv >> 2, allocateUTF8OnStack(thisProgram));
+ for (var i = 1; i < argc; i++) {
+  _asan_js_store_4((argv >> 2) + i, allocateUTF8OnStack(args[i - 1]));
+ }
+ _asan_js_store_4((argv >> 2) + argc, 0);
  try {
   var ret = entryFunction(argc, argv);
   exit(ret, true);
